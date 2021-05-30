@@ -12,16 +12,17 @@ Processing Systems (NIPS). 2016_](https://arxiv.org/pdf/1605.09673.pdf)
     3. Separable/Factorized Guided Convolution (SeparableGuidedConv2d)
 
 # Setup
+Add to an existing project using pip
+```
+pip install -e git+https://github.com/itsikad/guided-convolution.git#egg=guided_conv
+```
+
+Clone and install this repository
+
 ```
 clone https://github.com/itsikad/guided-convolution.git
 cd guided-convolution
 python setup.py install
-```
-
-OR
-
-```
-pip install -e git+https://github.com/itsikad/guided-convolution.git#egg=guided_conv
 ```
 
 # How To Use
