@@ -18,38 +18,81 @@ cd guided-convolution
 python setup.py install
 ```
 
-# How To Use
-Layers can be easily integrated into existing architectures by replacing `nn.Conv2D` layers with:
+OR
 
 ```
+pip install -e git+https://github.com/itsikad/guided-convolution.git#egg=guided_conv
+```
+
+# How To Use
+Layers can be easily integrated into existing architectures by replacing `nn.Conv2D` 
+and adding kernel generation networks (hypernet).
+
+## Code example
+Imports and initialization
+
+```
+import torch
+import torch.nn as nn
+from guided_conv import GuidedLocalConv2d, SeparableGuidedConv2d
+
 B, Ci, H, W = (16,3,28,28)  # batch size, input channels, height, width
 Co = 5  # output channels
 
 input = torch.randn((B,Ci,H,W))
+```
 
+Dynamic local filtering layer:
+
+```
 dynamic_conv = GuidedLocalConv2d(
     input_channels=Ci,
     output_channels=Co,
     kernel_size=(3,3)
     )
 
-weights = torch.randn((B,Ci,3*3,Co,H,W))
+# Kernel (weights) Generation Netowrk
+kgn = nn.Conv2d(
+    in_channels=Ci,
+    out_channels=Ci*3*3*Co,
+    kernel_size=(3,3),
+    padding=(1,1)
+    )
+weights = kgn(input).reshape((B,Ci,3*3,Co,H,W))
+
 out = dynamic_conv(input, weights)
 ```
 
-OR
+Separable Guided Convolution:
 
 ```
-input = torch.randn((B,Ci,H,W))
-
 sep_conv = SeparableGuidedConv2d(
     input_channels=Ci,
     output_channels=Co,
     kernel_size=(3,3)
     )
 
-cw_weights = torch.randn((B,Ci,3*3,H,W))  # channelwise convolution weights
-dw_weights = torch.randn((B,Ci,Co))  # depthwise convolution weights
+# Kernel (weights) Generation Netowrk (channelwise and depthwise weights)
+cw_kgn = nn.Conv2d(
+    in_channels=Ci,
+    out_channels=Ci*3*3,
+    kernel_size=(3,3),
+    padding=(1,1)
+    )
+
+dw_kgn = nn.Sequential(
+    nn.Conv2d(
+        in_channels=Ci,
+        out_channels=Ci*Co,
+        kernel_size=(3,3),
+        padding=(1,1)
+        ),
+    nn.AdaptiveAvgPool2d(output_size=(1,1))
+    )
+
+cw_weights = cw_kgn(input).reshape((B,Ci,3*3,H,W))  # channelwise convolution weights
+dw_weights = dw_kgn(input).reshape((B,Ci,Co))  # depthwise convolution weights
+
 out = sep_conv(input, cw_weights, dw_weights)
 ```
 
