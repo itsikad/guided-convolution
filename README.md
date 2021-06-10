@@ -13,13 +13,13 @@ Processing Systems (NIPS). 2016_](https://arxiv.org/pdf/1605.09673.pdf)
 
 # Setup
 Add to an existing project using pip
-```
+```bash
 pip install -e git+https://github.com/itsikad/guided-convolution.git#egg=guided_conv
 ```
 
 Clone and install this repository
 
-```
+```bash
 clone https://github.com/itsikad/guided-convolution.git
 cd guided-convolution
 python setup.py install
@@ -32,7 +32,7 @@ and adding kernel generation networks (hypernet).
 ## Code example
 Imports and initialization
 
-```
+```python
 import torch
 import torch.nn as nn
 from guided_conv import GuidedLocalConv2d, SeparableGuidedConv2d
@@ -45,7 +45,7 @@ input = torch.randn((B,Ci,H,W))
 
 Dynamic local filtering layer:
 
-```
+```python
 dynamic_conv = GuidedLocalConv2d(
     input_channels=Ci,
     output_channels=Co,
@@ -66,7 +66,7 @@ out = dynamic_conv(input, weights)
 
 Separable Guided Convolution:
 
-```
+```python
 sep_conv = SeparableGuidedConv2d(
     input_channels=Ci,
     output_channels=Co,
