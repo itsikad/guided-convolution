@@ -20,7 +20,7 @@ pip install -e git+https://github.com/itsikad/guided-convolution.git#egg=guided_
 Clone and install this repository
 
 ```bash
-clone https://github.com/itsikad/guided-convolution.git
+git clone https://github.com/itsikad/guided-convolution.git
 cd guided-convolution
 python setup.py install
 ```
