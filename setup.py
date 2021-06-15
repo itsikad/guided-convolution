@@ -10,7 +10,7 @@ with open(path_readme, "r") as fh:
 
 setuptools.setup(
     name="guided-conv",
-    version="0.1.2",
+    version="0.1.3",
     author="itsikad",
     author_email="itsik.adiv@gmail.com",
     description="Guided convolution/Dynamic filtering layers",
