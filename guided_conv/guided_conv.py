@@ -280,12 +280,17 @@ class SeparableGuidedConv2d(nn.Module):
         self._channelwise = GuidedChannelWiseConv2d(
             input_channels=input_channels,
             kernel_size=kernel_size
-            )
+        )
+
+        self._bn_relu = nn.Sequential(
+            nn.BatchNorm2d(num_features=input_channels),
+            nn.ReLU()
+        )
 
         self._depthwise = GuidedDepthWiseConv2d(
             input_channels=input_channels,
             output_channels=output_channels
-            )
+        )
 
     def forward(
         self,
