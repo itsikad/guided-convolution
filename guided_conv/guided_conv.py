@@ -312,6 +312,7 @@ class SeparableGuidedConv2d(nn.Module):
         """
 
         x = self._channelwise(input=input, weights=channel_wise_weights)
+        x = self._bn_relu(x)
         out = self._depthwise(input=x, weights=depth_wise_weights)
 
         return out
